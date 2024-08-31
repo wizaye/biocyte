@@ -11,10 +11,10 @@ import {
   IconHexagonNumber5,
   IconLayoutDashboard,
   IconServerOff,
-  IconSettings,
   IconUserShield,
   IconUsers,
   IconLock,
+  IconLogout
 } from '@tabler/icons-react'
 
 export interface NavLink {
@@ -124,9 +124,9 @@ export const sidelinks: SideLink[] = [
     ],
   },
   {
-    title: 'Settings',
+    title: 'Logout',
     label: '',
-    href: '/settings',
-    icon: <IconSettings size={18} />,
+    href: '/Logout',
+    icon: <IconLogout size={18} />,
   },
 ]

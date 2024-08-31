@@ -1,6 +1,6 @@
 import { HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
@@ -38,6 +38,7 @@ const formSchema = z.object({
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,6 +58,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
         setError(error.message) // Set error if authentication fails
+      }else{
+        navigate('/')
       }
     } catch (err) {
       setError('An unexpected error occurred')
