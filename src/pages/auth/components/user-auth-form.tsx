@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/custom/button'
 import { PasswordInput } from '@/components/custom/password-input'
 import { cn } from '@/lib/utils'
+import { supabase } from '@/lib/supabaseClient' // Import Supabase client
 
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -36,6 +37,7 @@ const formSchema = z.object({
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,13 +47,22 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    console.log(data)
+    setError(null) // Reset error state
 
-    setTimeout(() => {
+    const { email, password } = data
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        setError(error.message) // Set error if authentication fails
+      }
+    } catch (err) {
+      setError('An unexpected error occurred')
+    } finally {
       setIsLoading(false)
-    }, 3000)
+    }
   }
 
   return (
@@ -93,6 +104,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 </FormItem>
               )}
             />
+            {error && <p className='text-red-600'>{error}</p>}
             <Button className='mt-2' loading={isLoading}>
               Login
             </Button>

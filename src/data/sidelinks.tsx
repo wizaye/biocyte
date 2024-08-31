@@ -1,10 +1,7 @@
 import {
-  IconApps,
   IconBarrierBlock,
-  IconBoxSeam,
   IconChartHistogram,
   IconChecklist,
-  IconComponents,
   IconError404,
   IconExclamationCircle,
   IconHexagonNumber1,
@@ -13,11 +10,8 @@ import {
   IconHexagonNumber4,
   IconHexagonNumber5,
   IconLayoutDashboard,
-  IconMessages,
-  IconRouteAltLeft,
   IconServerOff,
   IconSettings,
-  IconTruck,
   IconUserShield,
   IconUsers,
   IconLock,
@@ -46,18 +40,6 @@ export const sidelinks: SideLink[] = [
     label: '3',
     href: '/tasks',
     icon: <IconChecklist size={18} />,
-  },
-  {
-    title: 'Chats',
-    label: '9',
-    href: '/chats',
-    icon: <IconMessages size={18} />,
-  },
-  {
-    title: 'Apps',
-    label: '',
-    href: '/apps',
-    icon: <IconApps size={18} />,
   },
   {
     title: 'Authentication',
@@ -104,36 +86,10 @@ export const sidelinks: SideLink[] = [
     icon: <IconUsers size={18} />,
   },
   {
-    title: 'Requests',
-    label: '10',
-    href: '/requests',
-    icon: <IconRouteAltLeft size={18} />,
-    sub: [
-      {
-        title: 'Trucks',
-        label: '9',
-        href: '/trucks',
-        icon: <IconTruck size={18} />,
-      },
-      {
-        title: 'Cargos',
-        label: '',
-        href: '/cargos',
-        icon: <IconBoxSeam size={18} />,
-      },
-    ],
-  },
-  {
     title: 'Analysis',
     label: '',
     href: '/analysis',
     icon: <IconChartHistogram size={18} />,
-  },
-  {
-    title: 'Extra Components',
-    label: '',
-    href: '/extra-components',
-    icon: <IconComponents size={18} />,
   },
   {
     title: 'Error Pages',
