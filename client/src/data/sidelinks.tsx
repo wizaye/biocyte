@@ -1,7 +1,7 @@
 import {
   IconBarrierBlock,
   IconChartHistogram,
-  IconChecklist,
+  // IconChecklist,
   IconError404,
   IconExclamationCircle,
   IconHexagonNumber1,
@@ -14,7 +14,10 @@ import {
   IconUserShield,
   IconUsers,
   IconLock,
-  IconLogout
+  IconLogout,
+  IconForklift,
+  IconCurrencyRupee,
+  IconFileDollar
 } from '@tabler/icons-react'
 
 export interface NavLink {
@@ -36,10 +39,22 @@ export const sidelinks: SideLink[] = [
     icon: <IconLayoutDashboard size={18} />,
   },
   {
-    title: 'Tasks',
+    title: 'Invoice',
+    label: '',
+    href: '/create-invoice',
+    icon: <IconFileDollar size={18} />,
+  },
+  {
+    title: 'Billing',
     label: '3',
-    href: '/tasks',
-    icon: <IconChecklist size={18} />,
+    href: '/billing',
+    icon: <IconCurrencyRupee size={18} />,
+  },
+  {
+    title: 'Inventory',
+    label: '',
+    href: '/inventory',
+    icon: <IconForklift size={18} />,
   },
   {
     title: 'Authentication',

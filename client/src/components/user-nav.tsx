@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/custom/button';
 import {
@@ -10,11 +11,25 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import { supabase } from '@/lib/supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 export function UserNav() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const { data, error } = await supabase.auth.getUser();
+      if (data) {
+        setUser(data.user);
+      } else if (error) {
+        console.error('Error fetching user data:', error.message);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
@@ -22,7 +37,7 @@ export function UserNav() {
       console.error('Error signing out:', error.message);
     } else {
       console.log('Signed out successfully');
-      navigate('/sign-in'); // Redirect using react-router
+      navigate('/sign-in');
     }
   }
 
@@ -31,17 +46,23 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>SN</AvatarFallback>
+            {user ? (
+              <AvatarImage src={user.user_metadata.avatar_url || '/avatars/default.png'} alt={user.user_metadata.full_name || 'User'} />
+            ) : (
+              <AvatarImage src="/avatars/default.png" alt="Default Avatar" />
+            )}
+            <AvatarFallback>
+              {user ? user.email.charAt(0).toUpperCase() : 'U'}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">satnaing</p>
+            <p className="text-sm font-medium leading-none">{user ? user.user_metadata.full_name : 'Loading...'}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              satnaingdev@gmail.com
+              {user ? user.email : 'Loading...'}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -51,15 +72,6 @@ export function UserNav() {
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>

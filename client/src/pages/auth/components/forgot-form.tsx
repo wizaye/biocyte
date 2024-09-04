@@ -13,6 +13,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { supabase } from '@/lib/supabaseClient' // Ensure you import the Supabase client
+import { useNavigate } from 'react-router-dom'
 
 interface ForgotFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -25,19 +27,31 @@ const formSchema = z.object({
 
 export function ForgotForm({ className, ...props }: ForgotFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const router = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: '' },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    console.log(data)
+    setErrorMessage('')
+    setSuccessMessage('')
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
+      redirectTo: 'https://localhost:5173/sign-in', // Customize this URL based on your app
+    })
+
+    if (error) {
+      setErrorMessage(`Error sending password reset email: ${error.message}`)
+    } else {
+      setSuccessMessage('Password reset email sent successfully.')
+    }
+
+    setIsLoading(false)
   }
 
   return (
@@ -64,6 +78,22 @@ export function ForgotForm({ className, ...props }: ForgotFormProps) {
           </div>
         </form>
       </Form>
+      {successMessage && (
+        <div className='mt-4 text-green-600'>
+          {successMessage}
+          <Button
+            className='ml-4'
+            onClick={() => router('/sign-in')}
+          >
+            Go to Sign In
+          </Button>
+        </div>
+      )}
+      {errorMessage && (
+        <div className='mt-4 text-red-600'>
+          {errorMessage}
+        </div>
+      )}
     </div>
   )
 }

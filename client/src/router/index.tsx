@@ -13,8 +13,10 @@ const ForgotPassword = React.lazy(() => import('../pages/auth/forgot-password'))
 const Otp = React.lazy(() => import('../pages/auth/otp'));
 const AppShell = React.lazy(() => import('../components/app-shell'));
 const Dashboard = React.lazy(() => import('../pages/dashboard'));
-const Tasks = React.lazy(() => import('@/pages/tasks'));
+const Billing = React.lazy(() => import('@/pages/billing'));
 const ComingSoon = React.lazy(() => import('@/components/coming-soon'));
+const Invoice= React.lazy(() => import('@/pages/invoice'));
+const Inventory = React.lazy(() => import('@/pages/inventory'));
 
 const router = createBrowserRouter([
   // Auth routes
@@ -66,8 +68,16 @@ const router = createBrowserRouter([
         element: <PrivateRoute element={Dashboard} />,
       },
       {
-        path: 'tasks',
-        element: <PrivateRoute element={Tasks} />,
+        path: 'billing',
+        element: <PrivateRoute element={Billing} />,
+      },
+      {
+        path: 'create-invoice',
+        element: <PrivateRoute element={Invoice} />,
+      },
+      {
+        path: 'inventory',
+        element: <PrivateRoute element={Inventory} />,
       },
       {
         path: 'users',
